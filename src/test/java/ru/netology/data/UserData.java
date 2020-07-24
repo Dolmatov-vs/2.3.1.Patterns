@@ -3,9 +3,7 @@ package ru.netology.data;
 import com.github.javafaker.Faker;
 import lombok.*;
 
-import javax.swing.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -18,7 +16,7 @@ public class UserData {
         private String city;
         private String date;
         private String fullName;
-        private String tel;
+        private String phone;
     }
 
     public static UserInfo getUserInfo() {
