@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Random;
 
 public class UserData {
     private UserData(){
@@ -19,8 +20,8 @@ public class UserData {
         private String phone;
     }
 
-    public static UserInfo getUserInfo() {
-        Faker faker = new Faker(new Locale("ru"));
+    public static UserInfo getUserInfo(int random) {
+        Faker faker = new Faker(new Locale("ru"), new Random(random));
         return new UserInfo(
                 faker.address().city(),
                 dateMeeting(),

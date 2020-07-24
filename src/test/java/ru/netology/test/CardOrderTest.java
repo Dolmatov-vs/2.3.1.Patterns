@@ -1,10 +1,8 @@
 package ru.netology.test;
 
 import com.codeborne.selenide.SelenideElement;
-import lombok.val;
-import org.junit.jupiter.api.BeforeEach;
-
-import org.junit.jupiter.api.Test;
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.*;
 
 import org.openqa.selenium.Keys;
 import ru.netology.data.UserData;
@@ -15,7 +13,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.chord;
 import static ru.netology.data.UserData.getUserInfo;
 
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CardOrderTest {
 
     String selectAll = chord(Keys.CONTROL, "a");
@@ -27,6 +25,11 @@ public class CardOrderTest {
     SelenideElement phoneField = $("[data-test-id=phone] input");
     SelenideElement checkbox = $("[data-test-id=agreement]");
     SelenideElement BookButton = $$(".form button").find(text("Запланировать"));
+    SelenideElement rescheduling = $("[data-test-id='replan-notification']");
+    Faker faker = new Faker();
+    int randomUser = 25;
+    int randomUserMin = 1;
+    int randomUserMax = 1000;
 
     @BeforeEach
     void setUp() {
@@ -34,9 +37,9 @@ public class CardOrderTest {
     }
 
     @Test
+    @Order(1)
     void shouldSuccessfulMeetingReservationTest() {
-        UserData.UserInfo user = getUserInfo();
-        System.out.println(user.getCity());
+        UserData.UserInfo user = getUserInfo(randomUser);
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
         dateField.setValue(String.valueOf(user.getDate()));
@@ -50,8 +53,25 @@ public class CardOrderTest {
     }
 
     @Test
+    @Order(2)
+    void shouldMeetingRescheduledSuccessfully() {
+        UserData.UserInfo user = getUserInfo(randomUser);
+        cityField.setValue(user.getCity());
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(String.valueOf(user.getDate()));
+        nameField.setValue(user.getFullName());
+        phoneField.setValue(user.getPhone());
+        checkbox.click();
+        BookButton.click();
+        rescheduling.waitUntil(visible, 15000);
+        rescheduling.$("button").click();
+        $("[data-test-id=success-notification]").shouldHave(text("Встреча успешно запланирована на"));
+        $("[data-test-id=success-notification]").shouldHave(text(String.valueOf(user.getDate())));
+    }
+
+    @Test
     void shouldCityFieldIsRequired() {
-        UserData.UserInfo user = getUserInfo();
+        UserData.UserInfo user = getUserInfo(faker.random().nextInt(randomUser,1000));
         dateField.sendKeys(selectAll, del);
         dateField.setValue(user.getDate());
         nameField.setValue(user.getFullName());
@@ -65,7 +85,7 @@ public class CardOrderTest {
 
     @Test
     void shouldDateFieldIsRequired(){
-        UserData.UserInfo user = getUserInfo();
+        UserData.UserInfo user = getUserInfo(faker.random().nextInt(randomUserMin,randomUserMax));
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
         dateField.setValue(user.getFullName());
@@ -79,7 +99,7 @@ public class CardOrderTest {
 
     @Test
     void shouldNameFieldIsRequired(){
-        UserData.UserInfo user = getUserInfo();
+        UserData.UserInfo user = getUserInfo(faker.random().nextInt(randomUserMin,randomUserMax));
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
         dateField.setValue(user.getDate());
@@ -93,7 +113,7 @@ public class CardOrderTest {
 
     @Test
     void shouldTelFieldIsRequired(){
-        UserData.UserInfo user = getUserInfo();
+        UserData.UserInfo user = getUserInfo(faker.random().nextInt(randomUserMin,randomUserMax));
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
         dateField.setValue(user.getDate());
@@ -107,7 +127,7 @@ public class CardOrderTest {
 
     @Test
     void shouldCheckboxFieldIsRequired(){
-        UserData.UserInfo user = getUserInfo();
+        UserData.UserInfo user = getUserInfo(faker.random().nextInt(randomUserMin,randomUserMax));
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
         dateField.setValue(user.getDate());
