@@ -42,14 +42,14 @@ public class CardOrderTest {
         UserData.UserInfo user = getUserInfo(randomUser);
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
-        dateField.setValue(String.valueOf(user.getDate()));
+        dateField.setValue(user.getDate());
         nameField.setValue(user.getFullName());
         phoneField.setValue(user.getPhone());
         checkbox.click();
         BookButton.click();
         $(withText("Успешно!")).waitUntil(visible, 15000);
         $("[data-test-id=success-notification]").shouldHave(text("Встреча успешно запланирована на"));
-        $("[data-test-id=success-notification]").shouldHave(text(String.valueOf(user.getDate())));
+        $("[data-test-id=success-notification]").shouldHave(text(user.getDate()));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class CardOrderTest {
         UserData.UserInfo user = getUserInfo(randomUser);
         cityField.setValue(user.getCity());
         dateField.sendKeys(selectAll, del);
-        dateField.setValue(String.valueOf(user.getDate()));
+        dateField.setValue(user.getDate());
         nameField.setValue(user.getFullName());
         phoneField.setValue(user.getPhone());
         checkbox.click();
@@ -66,7 +66,7 @@ public class CardOrderTest {
         rescheduling.waitUntil(visible, 15000);
         rescheduling.$("button").click();
         $("[data-test-id=success-notification]").shouldHave(text("Встреча успешно запланирована на"));
-        $("[data-test-id=success-notification]").shouldHave(text(String.valueOf(user.getDate())));
+        $("[data-test-id=success-notification]").shouldHave(text(user.getDate()));
     }
 
     @Test
