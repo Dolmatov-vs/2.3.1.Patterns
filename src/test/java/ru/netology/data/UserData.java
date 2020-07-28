@@ -20,8 +20,8 @@ public class UserData {
         private String phone;
     }
 
-    public static UserInfo getUserInfo(int random) {
-        Faker faker = new Faker(new Locale("ru"), new Random(random));
+    public static UserInfo getUserInfo() {
+        Faker faker = new Faker(new Locale("ru"));
         return new UserInfo(
                 faker.address().city(),
                 dateMeeting(),
